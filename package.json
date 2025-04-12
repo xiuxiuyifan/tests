@@ -33,7 +33,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js}": [
-      "eslint --config .eslintrc.js"
+      "eslint ."
     ],
     "**/*": "prettier --write --ignore-unknown"
   }
