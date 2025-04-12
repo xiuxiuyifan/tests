@@ -6,6 +6,7 @@ import "./App.css";
 function App() {
   const [count, setCount] = useState(0);
   const a = 100;
+  let b = 200;
 
   return (
     <>
