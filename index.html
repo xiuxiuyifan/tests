@@ -5,9 +5,61 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/element-plus@2.9.7/dist/index.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/ant-design-vue@4.2.6/dist/reset.min.css"
+    /> -->
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- <script>
+      // 动态创建 importmap
+      const importMap = {
+        imports: {
+          vue: 'https://cdn.jsdelivr.net/npm/@vue/runtime-dom@latest/dist/runtime-dom.esm-browser.js',
+          'element-plus':
+            'https://cdn.jsdelivr.net/npm/element-plus@latest/dist/index.full.min.mjs',
+        },
+      };
+
+      // 创建 importmap 脚本元素
+      const importMapScript = document.createElement('script');
+      importMapScript.type = 'importmap';
+      importMapScript.textContent = JSON.stringify(importMap);
+      document.head.appendChild(importMapScript);
+    </script> -->
+
+    <!-- 使用 import map -->
+    <!-- <script type="module">
+      import { createApp } from 'vue';
+      import ElementPlus from 'element-plus';
+
+      // 使用导入的模块
+      const app = createApp({
+        render() {
+          return 'Hello Vite + Vue!';
+        },
+      });
+      app.use(ElementPlus);
+      app.mount('#root');
+    </script> -->
+    <!-- <script type="systemjs-importmap">
+      {
+        "imports": {
+          "react": "https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js",
+          "react-dom": "https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js",
+          "App": "/src/App.tsx"
+        }
+      }
+    </script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.js"></script> -->
+    <!-- <script type="systemjs-module" src="/src/loadImportScript.tsx"></script> -->
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

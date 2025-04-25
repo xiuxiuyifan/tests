@@ -1,0 +1,64 @@
+<!doctype html>
+<div id="app"></div>
+<script type="importmap">
+  {
+    "imports": {
+      "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+    }
+  }
+</script>
+<script type="module">
+  import { createApp } from 'vue';
+  import * as vue from 'vue';
+  const libs = {
+    vue,
+  };
+  console.log(libs);
+  window.___magic__import__ = function (lib, name) {
+    if (Object.prototype.toString.call(libs[lib]) != '[object Module]' && name == '*') {
+      return libs[lib];
+    }
+    return (libs[lib] || {})[name];
+  };
+  // 假设 compileJs 是编译后的代码字符串
+  const componentCode = `(function(){
+/* Analyzed bindings: {
+"greeting": "data",
+"count": "data"
+} */
+
+const __sfc__ = {
+data() {
+return {
+greeting: 'Hello Volar!',
+count: 0
+}
+},
+mounted() {
+console.log('Component mounted')
+}
+}
+
+const _toDisplayString = ___magic__import__('vue', 'toDisplayString');
+const _createElementVNode = ___magic__import__('vue', 'createElementVNode');
+const _openBlock = ___magic__import__('vue', 'openBlock');
+const _createElementBlock = ___magic__import__('vue', 'createElementBlock');
+
+const _hoisted_1 = { class: "demo" }
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+return (_openBlock(), _createElementBlock("div", _hoisted_1, [
+_createElementVNode("h1", null, _toDisplayString($data.greeting), 1 /* TEXT */),
+_createElementVNode("button", {
+onClick: _cache[0] || (_cache[0] = $event => ($data.count++))
+}, "Count is: " + _toDisplayString($data.count), 1 /* TEXT */)
+]))
+}
+__sfc__.render = render
+__sfc__.__scopeId = "data-v-0641512887e913676d33b5ef9dc388fd"
+__sfc__.__file = "0641512887e913676d33b5ef9dc388fd.vue"
+return __sfc__
+})()`;
+  const component = eval(componentCode);
+
+  createApp(component).mount('#app');
+</script>
