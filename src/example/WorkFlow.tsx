@@ -14,23 +14,49 @@ import {
   getBezierPath,
   BaseEdge,
   EdgeLabelRenderer,
+  Connection,
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
 import { OscillatorNode } from './components/OscillatorNode.tsx';
 import { VolumeNodes } from './components/VolumeNode.tsx';
 import { OutputNode } from './components/OutputNode.tsx';
+import { connect, createAudioNode, disconnect, removeAudioNode } from './components/audio.tsx';
 
+// const initialNodes = [
+//   // dada 会被打入到 type 组件的 props 中去
+//   { id: '1', position: { x: 0, y: 0 }, data: { frequency: 300, type: 'square' }, type: 'osc' },
+//   { id: '2', position: { x: 0, y: 300 }, data: { gain: 0.6 }, type: 'volume' },
+//   { id: '3', position: { x: 0, y: 500 }, data: {}, type: 'out' },
+// ];
+
+// dada 会被打入到 type 组件的 props 中去
 const initialNodes = [
-  // dada 会被打入到 type 组件的 props 中去
-  { id: '1', position: { x: 0, y: 0 }, data: { frequency: 300, type: 'square' }, type: 'osc' },
-  { id: '2', position: { x: 0, y: 300 }, data: { gain: 0.6 }, type: 'volume' },
-  { id: '3', position: { x: 0, y: 500 }, data: {}, type: 'out' },
+  {
+    id: 'a',
+    position: { x: 200, y: 0 },
+    data: {
+      frequency: 200,
+      type: 'square',
+    },
+    type: 'osc',
+  },
+  {
+    id: 'b',
+    type: 'volume',
+    data: { gain: 0.5 },
+    position: { x: 150, y: 250 },
+  },
+  {
+    id: 'c',
+    type: 'out',
+    data: {},
+    position: { x: 350, y: 400 },
+  },
 ];
-const initialEdges = [
-  { id: 'e1-1', type: 'custom', source: '1', target: '2' },
-  { id: 'e1-2', type: 'custom', source: '2', target: '3' },
-];
+window.xxx = initialNodes;
+
+const initialEdges = [];
 
 // interface NodeProps {
 //   data: {
@@ -71,7 +97,7 @@ function CustomEdge({
   style = {},
   markerEnd,
 }: EdgeProps) {
-  const { setEdges } = useReactFlow();
+  const { deleteElements } = useReactFlow();
 
   // 计算贝塞尔曲线，绘制曲线
   const [edgePath, labelX, labelY] = getBezierPath({
@@ -92,7 +118,7 @@ function CustomEdge({
   // });
 
   const onEdgeClick = () => {
-    setEdges((edges) => edges.filter((edge) => edge.id !== id));
+    deleteElements({ edges: [{ id }] });
   };
 
   return (
@@ -108,35 +134,81 @@ function CustomEdge({
             pointerEvents: 'all',
           }}
         >
-          <button onClick={onEdgeClick}>×</button>
+          <div
+            className={
+              'nodrag nopan text-center leading-[15px] text-[14px] bg-violet-50 w-[15px] h-[15px]'
+            }
+            onClick={onEdgeClick}
+          >
+            ×
+          </div>
         </div>
       </EdgeLabelRenderer>
     </>
   );
 }
 
-const nodeTypes = {
-  osc: OscillatorNode,
-  volume: VolumeNodes,
-  out: OutputNode,
-};
-
 export default function WorkFlow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  const nodeTypes = {
+    osc: (props) => <OscillatorNode {...props} />,
+    volume: (props) => <VolumeNodes {...props} />,
+    out: OutputNode,
+  };
 
-  const handleAddNode = () => {
-    setNodes([
-      ...nodes,
-      {
-        id: Math.random().toString().split(2, 6) + '',
-        type: 'red',
-        position: { x: 0, y: 0 },
-        data: { label: '新节点' },
-      },
-    ]);
+  const onConnect = useCallback(
+    (params: Connection) => {
+      connect(params.source, params.target);
+      setEdges((eds) => {
+        return addEdge(
+          {
+            ...params,
+            type: 'custom',
+          },
+          eds,
+        );
+      });
+    },
+    [setEdges],
+  );
+
+  const addOscNode = () => {
+    // 构建新的 node 数据
+    const id = Math.random().toString().slice(2, 8);
+    const position = { x: 0, y: 0 };
+    const type = 'osc';
+    const data = { frequency: 400, type: 'sine' };
+
+    // node 里面需要位置信息
+    setNodes([...nodes, { id, type, data, position }]);
+    createAudioNode(id, type, data);
+  };
+
+  const addVolumeNode = () => {
+    const id = Math.random().toString().slice(2, 8);
+    const position = { x: 0, y: 0 };
+    const type = 'volume';
+    const data = { gain: 0.5 };
+    setNodes([...nodes, { id, type, data, position }]);
+    createAudioNode(id, type, data);
+  };
+
+  const onNodesChangeCallback = (nodes) => {
+    console.log('nodes', nodes);
+    for (const { id } of nodes) {
+      removeAudioNode(id);
+    }
+  };
+
+  // 删除边
+  const onEdgesChangeCallback = (edges) => {
+    console.log('edges', edges);
+    for (const item of edges) {
+      const { source, target } = item;
+      disconnect(source, target);
+    }
   };
 
   return (
@@ -151,11 +223,18 @@ export default function WorkFlow() {
         nodeTypes={nodeTypes}
         // 传入自定义边
         edgeTypes={{ custom: CustomEdge }}
+        onNodesDelete={onNodesChangeCallback}
+        onEdgesDelete={onEdgesChangeCallback}
         fitView
       >
         {/* 添加右侧面板 */}
-        <Panel position="top-right">
-          <button onClick={handleAddNode}>添加节点</button>
+        <Panel position="top-right" className={'space-x-4'}>
+          <button onClick={addOscNode} className={'p-[4px] rounded bg-white shadow'}>
+            添加振荡器节点
+          </button>
+          <button onClick={addVolumeNode} className={'p-[4px] rounded bg-white shadow'}>
+            添加音量节点
+          </button>
         </Panel>
         <Controls />
         <MiniMap zoomable />
@@ -164,3 +243,8 @@ export default function WorkFlow() {
     </div>
   );
 }
+
+// 有几件事情是重要的
+// 1. 创建节点的时候 nodes 数据需要根据最新添加的变化
+// 2. 创建新节点的时候需要在 map 中创建出振荡器节点的具体实例 以便于后续进行关联
+// 3. connect 的时候只需要在 map 中找到对应的 source node 和 target node 调用 connect 方法就行了
