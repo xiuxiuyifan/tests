@@ -5,7 +5,9 @@ import WorkFlow from './example/WorkFlow';
 // import RenderVue from './RenderVue';
 //
 // import ClosureComp from './example/closure';
-// import LowcodeEditor from './editor';
+import LowcodeEditor from './editor';
+import TestMobxStateTree from './example/components/test-mobx-state-tree';
+import { MobxStateTreeDemo, rootStore } from './example/components/test-mobx-state-tree1';
 // import { InputAmount } from './example/decorator';
 
 function App() {
@@ -141,10 +143,12 @@ function App() {
       </div> */}
       {/* {showVue ? <RenderVue componentCode={componentCode} /> : '不展示'} */}
       {/* <ClosureComp /> */}
-      {/* <LowcodeEditor /> */}
+      {/* <TestMobxStateTree /> */}
+      <LowcodeEditor />
       {/* <InputAmount /> */}
 
-      <WorkFlow />
+      {/* <WorkFlow /> */}
+      {/* <MobxStateTreeDemo store={rootStore} /> */}
     </>
   );
 }
