@@ -1,41 +1,43 @@
 import { useEffect } from 'react';
 import { useTodoStore } from '../stores/todo';
+import { useComponent } from '../stores/components';
 
 export function EditArea() {
   const { list, addItem, updateItem, deleteItem } = useTodoStore();
+  const { components, addComponent, updateComponentProps } = useComponent();
 
   useEffect(() => {
     useTodoStore.subscribe((state) => {
       console.log('state', state);
     });
+    addComponent(
+      {
+        id: 222,
+        name: 'Container',
+        desc: '容器组件',
+        props: {},
+        children: [],
+      },
+      1,
+    );
+    addComponent(
+      {
+        id: 333,
+        name: 'Video',
+        desc: '视频',
+        props: {},
+        children: [],
+      },
+      222,
+    );
+
+    updateComponentProps(222, {
+      title: '666666'
+    })
   }, []);
   return (
     <div className="h">
-      <div>列表</div>
-      {list.map((item) => {
-        return (
-          <div key={item.id}>
-            内容：{item.content}
-            状态：{item.status === 'todo' ? '进行中' : '已完成'}
-            <button
-              onClick={() =>
-                updateItem({
-                  id: item.id,
-                  status: item.status === 'todo' ? 'done' : 'todo',
-                  content: 'new item',
-                })
-              }
-            >
-              更新
-            </button>
-            <button onClick={() => deleteItem(item.id)}>删除</button>
-          </div>
-        );
-      })}
-
-      <button onClick={() => addItem({ id: Date.now() + '', status: 'todo', content: 'new item' })}>
-        增加
-      </button>
+      <pre>{JSON.stringify(components, null, 2)}</pre>
     </div>
   );
 }
