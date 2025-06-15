@@ -3,5 +3,11 @@ import './index.css';
 import App from './App';
 
 import './example/decorator';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
-createRoot(document.getElementById('root')!).render(<App />);
+createRoot(document.getElementById('root')!).render(
+    <DndProvider backend={HTML5Backend}>
+        <App />
+    </DndProvider>
+);

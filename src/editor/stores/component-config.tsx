@@ -52,3 +52,6 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
         }
     })
 }))
+
+
+// 这里负责注册物料，json 里面的会从这里来查找对应的类型

@@ -14,32 +14,6 @@ export function EditArea() {
     useTodoStore.subscribe((state) => {
       console.log('state', state);
     });
-    addComponent(
-      {
-        id: 222,
-        name: 'Container',
-        desc: '容器组件',
-        props: {},
-        children: [],
-      },
-      1,
-    );
-    addComponent(
-      {
-        id: 333,
-        name: 'Button',
-        desc: '按钮',
-        props: {
-          text: '无敌',
-        },
-        children: [],
-      },
-      222,
-    );
-
-    updateComponentProps(222, {
-      title: '666666',
-    });
   }, []);
 
   function renderComponent(components: Component[]): React.ReactNode {
@@ -51,7 +25,9 @@ export function EditArea() {
       return React.createElement(
         config.component,
         {
-          key: component.id,
+          key: component.id,  
+          id: component.id,  // 把自己的 id 当做 props 传递到 props 里面去，方便后续，在组件内部调用 插入组件的方法、
+          name: component.name,
           ...config.defaultProps,
           ...component.props,
         },
@@ -61,8 +37,8 @@ export function EditArea() {
     });
   }
   return (
-    <div className="h">
-      <pre>{JSON.stringify(components, null, 2)}</pre>
+    <div className="h-[100%]">
+      {/* <pre>{JSON.stringify(components, null, 2)}</pre> */}
       {renderComponent(components)}
     </div>
   );
