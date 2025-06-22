@@ -15,13 +15,17 @@ export function useMaterialDrop(accept: string[], id: number) {
         return;
       }
       // 拖拽放下的时候添加组件
-      const props = componentConfig[item.type].defaultProps;
+      const config = componentConfig[item.type];
       // 根据拖拽过来的类型，添加组件到 json 里面去
       addComponent(
         {
           id: new Date().getTime(),
           name: item.type,
-          props,
+          desc: config.desc,
+          props: config.defaultProps,
+          styles: {
+            background: 'pink',
+          },
         },
         id,
       );
@@ -33,6 +37,6 @@ export function useMaterialDrop(accept: string[], id: number) {
 
   return {
     canDrop,
-    drop
+    drop,
   };
 }

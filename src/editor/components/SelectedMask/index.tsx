@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getComponentById, useComponent } from '../../stores/components';
 import { createPortal } from 'react-dom';
-import { Popconfirm, Space } from 'antd';
+import { Dropdown, Popconfirm, Space } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
 interface SelectedMaskProps {
@@ -29,6 +29,12 @@ export default function SelectedMask({
   useEffect(() => {
     updatePosition();
   }, [componentId]);
+
+  useEffect(() => {
+    updatePosition()
+  }, [components])
+
+
   function updatePosition() {
     if (!componentId) return;
 
@@ -38,7 +44,7 @@ export default function SelectedMask({
     // 组件 当前点击的 node 节点信息
     const node = document.querySelector(`[data-component-id="${componentId}"]`);
     if (!node) return;
-    
+
     const { top, left, width, height } = node.getBoundingClientRect();
     const { top: containerTop, left: containerLeft } = container.getBoundingClientRect();
 
@@ -72,6 +78,30 @@ export default function SelectedMask({
     setCurComponentId(null);
   }
 
+  // 选中的 元素发生变化的时候，向上查找 父级元素
+  const parentComponents = useMemo(() => {
+    const parentComponents: any = [];
+    let component = curComponent;
+
+    // 如果当前元素有父级
+    while (component?.parentId) {
+      component = getComponentById(component.parentId, components);
+      parentComponents.push(component);
+    }
+    return parentComponents;
+  }, [curComponent]);
+
+
+  useEffect(() => {
+    const resizeHandler = () => {
+      updatePosition()
+    }
+    window.addEventListener('resize', resizeHandler)
+    return () => {
+      window.removeEventListener('resize', resizeHandler)
+    }
+  }, [])
+
   return createPortal(
     <>
       <div
@@ -101,18 +131,31 @@ export default function SelectedMask({
         }}
       >
         <Space>
-          <div
-            style={{
-              padding: '0 8px',
-              backgroundColor: 'blue',
-              borderRadius: 4,
-              color: '#fff',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
+          <Dropdown
+            menu={{
+              items: parentComponents.map((item) => ({
+                key: item.id,
+                label: item.desc,
+              })),
+              onClick: ({ key }) => {
+                setCurComponentId(+key);
+              },
             }}
+            disabled={parentComponents.length === 0}
           >
-            {curComponent?.name}
-          </div>
+            <div
+              style={{
+                padding: '0 8px',
+                backgroundColor: 'blue',
+                borderRadius: 4,
+                color: '#fff',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {curComponent?.desc}
+            </div>
+          </Dropdown>
           {curComponentId !== 1 && (
             <div style={{ padding: '0 8px', backgroundColor: 'blue' }}>
               <Popconfirm

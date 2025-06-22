@@ -6,13 +6,13 @@ import { useComponent } from '../../stores/components';
 import { useDrop } from 'react-dnd';
 import { useMaterialDrop } from '../../hooks/useMaterialDrop';
 
-const Container = ({ id, children }: CommonComponentProps) => {
-
-  const { canDrop, drop } = useMaterialDrop(['Button','Container'], id)
+const Container = ({ id, children, styles }: CommonComponentProps) => {
+  const { canDrop, drop } = useMaterialDrop(['Button', 'Container'], id);
 
   return (
     <div
       data-component-id={id}
+      style={styles}
       ref={drop}
       className={`border-[1px] ${canDrop ? 'border-[2px] border-[blue]' : 'border-[1px]'} min-h[100px] p-[20px]`}
     >
