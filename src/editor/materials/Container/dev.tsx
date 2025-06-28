@@ -6,7 +6,7 @@ import { useComponent } from '../../stores/components';
 import { useDrop } from 'react-dnd';
 import { useMaterialDrop } from '../../hooks/useMaterialDrop';
 
-const Container = ({ id, children, styles }: CommonComponentProps) => {
+const ContainerDev = ({ id, children, styles }: CommonComponentProps) => {
   const { canDrop, drop } = useMaterialDrop(['Button', 'Container'], id);
 
   return (
@@ -21,4 +21,4 @@ const Container = ({ id, children, styles }: CommonComponentProps) => {
   );
 };
 
-export default Container;
+export default ContainerDev;

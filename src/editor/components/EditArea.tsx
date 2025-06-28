@@ -24,11 +24,11 @@ export function EditArea() {
   function renderComponent(components: Component[]): React.ReactNode {
     return components.map((component: Component) => {
       const config = componentConfig?.[component.name];
-      if (!config?.component) {
+      if (!config?.dev) {
         return null;
       }
       return React.createElement(
-        config.component,
+        config.dev,
         {
           key: component.id,
           id: component.id, // 把自己的 id 当做 props 传递到 props 里面去，方便后续，在组件内部调用 插入组件的方法、

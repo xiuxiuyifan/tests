@@ -6,7 +6,7 @@ import { useComponent } from '../../stores/components';
 import { useMaterialDrop } from '../../hooks/useMaterialDrop';
 import { CommonComponentProps } from '../../interface';
 
-function Page({ id, name, children, styles }: CommonComponentProps) {
+function PageDev({ id, name, children, styles }: CommonComponentProps) {
   const { canDrop, drop } = useMaterialDrop(['Button', 'Container'], id);
 
   return (
@@ -23,4 +23,4 @@ function Page({ id, name, children, styles }: CommonComponentProps) {
   );
 }
 
-export default Page;
+export default PageDev;

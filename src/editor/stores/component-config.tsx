@@ -1,7 +1,13 @@
 import { create } from 'zustand';
-import Container from '../materials/Container';
-import Button from '../materials/Button';
-import Page from '../materials/Page';
+import Container from '../materials/Container/dev';
+import Button from '../materials/Button/prod';
+import Page from '../materials/Page/dev';
+import ButtonDev from '../materials/Button/dev';
+import ContainerDev from '../materials/Container/dev';
+import ContainerProd from '../materials/Container/prod';
+import ButtonProd from '../materials/Button/prod';
+import PageDev from '../materials/Page/dev';
+import PageProd from '../materials/Page/prod';
 
 export interface ComponentSetter {
   name: string; // 要修改组件的 props 字段名
@@ -14,9 +20,10 @@ export interface ComponentConfig {
   name: string;
   defaultProps: Record<string, any>;
   desc: string;
-  component: any;
-  setter?: ComponentSetter[];
-  stylesSetter?: ComponentSetter[];
+  setter?: ComponentSetter[]; // 组件属性
+  stylesSetter?: ComponentSetter[]; // 样式属性
+  dev: any; // 编辑的时候展示的组件
+  prod: any; //  预览的时候展示的组件
 }
 
 interface State {
@@ -35,7 +42,8 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
       name: 'Container',
       defaultProps: {},
       desc: '容器',
-      component: Container,
+      dev: ContainerDev,
+      prod: ContainerProd,
     },
     Button: {
       name: 'Button',
@@ -44,7 +52,8 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
         type: 'primary',
         text: '按钮',
       },
-      component: Button,
+      dev: ButtonDev,
+      prod: ButtonProd,
       // 属性
       setter: [
         {
@@ -80,7 +89,8 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
       name: 'Page',
       desc: '页面',
       defaultProps: {},
-      component: Page,
+      dev: PageDev,
+      prod: PageProd,
     },
   },
   // 注册组件

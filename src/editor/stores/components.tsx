@@ -13,9 +13,10 @@ export interface Component {
 }
 
 interface State {
-  components: Component[];
-  curComponentId?: number | null;
-  curComponent: Component | null;
+  components: Component[]; // 组件列表
+  curComponentId?: number | null; // 当前激活组件的 id
+  curComponent: Component | null; // 当前激活的组件
+  mode: 'edit' | 'preview';
 }
 
 interface Action {
@@ -24,6 +25,7 @@ interface Action {
   updateComponentProps: (componentId: number, props: any) => void;
   updateComponentStyles: (componentId: number, styles: CSSProperties, replace?: boolean) => void;
   setCurComponentId: (componentId: number | null) => void;
+  setMode: (mode: State['mode']) => void;
 }
 
 export const useComponent = create<State & Action>((set, get) => ({
@@ -37,6 +39,8 @@ export const useComponent = create<State & Action>((set, get) => ({
   ],
   curComponentId: null,
   curComponent: null,
+  mode: 'edit',
+  setMode: (mode) => set({ mode }),
   setCurComponentId: (componentId) =>
     set((state) => ({
       curComponentId: componentId,
