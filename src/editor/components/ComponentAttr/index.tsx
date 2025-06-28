@@ -40,13 +40,13 @@ export function ComponentAttr() {
   return (
     <Form form={form} onValuesChange={valueChange} labelCol={{ span: 8 }} wrapperCol={{ span: 14 }}>
       <Form.Item label="组件id">
-        <Input value={curComponent?.id} />
+        <Input value={curComponent?.id} disabled />
       </Form.Item>
       <Form.Item label="组件名称">
-        <Input value={curComponent?.name} />
+        <Input value={curComponent?.name} disabled />
       </Form.Item>
       <Form.Item label="组件描述">
-        <Input value={curComponent?.desc} />
+        <Input value={curComponent?.desc} disabled />
       </Form.Item>
       {/* 再遍历样式属性 */}
       {componentConfig[curComponent?.name].setter?.map((setter) => (

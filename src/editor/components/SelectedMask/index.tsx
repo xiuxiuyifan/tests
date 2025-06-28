@@ -31,9 +31,10 @@ export default function SelectedMask({
   }, [componentId]);
 
   useEffect(() => {
-    updatePosition()
-  }, [components])
-
+    setTimeout(() => {
+      updatePosition();
+    }, 200);
+  }, [components]);
 
   function updatePosition() {
     if (!componentId) return;
@@ -91,16 +92,15 @@ export default function SelectedMask({
     return parentComponents;
   }, [curComponent]);
 
-
   useEffect(() => {
     const resizeHandler = () => {
-      updatePosition()
-    }
-    window.addEventListener('resize', resizeHandler)
+      updatePosition();
+    };
+    window.addEventListener('resize', resizeHandler);
     return () => {
-      window.removeEventListener('resize', resizeHandler)
-    }
-  }, [])
+      window.removeEventListener('resize', resizeHandler);
+    };
+  }, []);
 
   return createPortal(
     <>

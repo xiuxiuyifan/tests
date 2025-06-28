@@ -4,9 +4,9 @@ import Button from '../materials/Button';
 import Page from '../materials/Page';
 
 export interface ComponentSetter {
-  name: string;
+  name: string; // 要修改组件的 props 字段名
   label: string;
-  type: string;
+  type: string; // 对应修改的类型 input 或者 select 框类型
   [key: string]: any;
 }
 
@@ -16,6 +16,7 @@ export interface ComponentConfig {
   desc: string;
   component: any;
   setter?: ComponentSetter[];
+  stylesSetter?: ComponentSetter[];
 }
 
 interface State {
@@ -44,6 +45,7 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
         text: '按钮',
       },
       component: Button,
+      // 属性
       setter: [
         {
           name: 'type',
@@ -58,6 +60,19 @@ export const useComponentConfigStore = create<State & Action>((set) => ({
           name: 'text',
           label: '文本',
           type: 'input',
+        },
+      ],
+      // 样式
+      stylesSetter: [
+        {
+          name: 'width',
+          label: '宽度',
+          type: 'inputNumber',
+        },
+        {
+          name: 'height',
+          label: '高度',
+          type: 'inputNumber',
         },
       ],
     },

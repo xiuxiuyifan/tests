@@ -8,6 +8,7 @@ import WorkFlow from './example/WorkFlow';
 import LowcodeEditor from './editor';
 import TestMobxStateTree from './example/components/test-mobx-state-tree';
 import { MobxStateTreeDemo, rootStore } from './example/components/test-mobx-state-tree1';
+import MyCustomForm from './editor/example/MyCustomForm';
 // import { InputAmount } from './example/decorator';
 
 function App() {
@@ -145,6 +146,7 @@ function App() {
       {/* <ClosureComp /> */}
       {/* <TestMobxStateTree /> */}
       <LowcodeEditor />
+      {/* <MyCustomForm /> */}
       {/* <InputAmount /> */}
 
       {/* <WorkFlow /> */}
