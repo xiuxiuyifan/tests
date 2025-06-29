@@ -2,6 +2,8 @@ import React from 'react';
 import { useComponentConfigStore } from '../../stores/component-config';
 import { Component, useComponent } from '../../stores/components';
 import { message } from 'antd';
+import { GoToLinkConfig } from '../actions/GoToLink';
+import { ShowMessageConfig } from '../actions/ShowMessage';
 
 export function Preview() {
   const { components } = useComponent();
@@ -25,19 +27,19 @@ export function Preview() {
       //     },
       const eventConfig = component.props[event.name];
       if (eventConfig) {
-        const { type } = eventConfig;
         // 给 props 里面 添加事件函数、
         props[event.name] = () => {
-          if (type === 'goToLink' && eventConfig.url) {
-            window.location.href = eventConfig.url;
-          } else if (type === 'showMessage' && eventConfig.config) {
-            if (eventConfig.config.type === 'success') {
-              debugger;
-              messageApi.success(eventConfig.config.text);
-            } else if (eventConfig.config.type === 'error') {
-              messageApi.error(eventConfig.config.text);
+          eventConfig?.actions.forEach((action: GoToLinkConfig | ShowMessageConfig) => {
+            if (action.type === 'goToLink') {
+              window.location.href = action.url;
+            } else if (action.type === 'showMessage') {
+              if (action.config.type === 'success') {
+                messageApi.success(action.config.text);
+              } else if (action.config.type === 'error') {
+                messageApi.error(action.config.text);
+              }
             }
-          }
+          });
         };
       }
     });
