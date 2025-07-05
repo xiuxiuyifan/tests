@@ -1,7 +1,7 @@
 import { Input, Select } from 'antd';
 import { useComponent } from '../../stores/components';
 import { ComponentEvent } from '../../stores/component-config';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface ShowMessageConfig {
   type: 'showMessage';
@@ -17,9 +17,9 @@ export interface ShowMessageProps {
 }
 export default function ShowMessage(props: ShowMessageProps) {
   const { curComponent, curComponentId, updateComponentProps } = useComponent();
-  const { value, onChange } = props;
-  const [type, setType] = useState<'success' | 'error'>(value?.type || 'success');
-  const [text, setText] = useState(value?.text || '');
+  const { value: val, onChange } = props;
+  const [type, setType] = useState<'success' | 'error'>(val?.type || 'success');
+  const [text, setText] = useState(val?.text || '');
 
   // 跟新 event props 事件里面的  config
   function messageTextChange(value: string) {
@@ -48,6 +48,13 @@ export default function ShowMessage(props: ShowMessageProps) {
       },
     });
   }
+
+  useEffect(() => {
+    if (val) {
+      setText(val.text);
+      setType(val.type);
+    }
+  }, [val]);
 
   return (
     <div className="mt-[10px]">
